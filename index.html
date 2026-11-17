@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JAVA QUEST — Offline Edition. Interactive Java learning & gaming platform for exam prep. Solo, Team and Host modes. Static, GitHub Pages ready." />
+  <title>JAVA QUEST — Offline Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2300f0ff'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='%23050816' font-family='Arial' font-weight='900'%3EJ%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="app-wrap">
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+      <div class="brand" id="brandHome">
+        <div class="logo">JQ</div>
+        <div class="title">JAVA QUEST<small>OFFLINE EDITION</small></div>
+      </div>
+      <nav id="topNav">
+        <button data-nav="home" class="active">Home</button>
+        <button data-nav="missions">Missions</button>
+        <button data-nav="solo">Solo</button>
+        <button data-nav="team">Team</button>
+        <button data-nav="host">Host</button>
+        <button data-nav="bank">Question Bank</button>
+        <button data-nav="profile">Profile</button>
+      </nav>
+      <div class="xp-chip" id="xpChip" title="Your total XP and level">
+        <span>LVL</span><span class="lvl" id="xpLvl">1</span>
+        <span>·</span>
+        <span id="xpVal">0 XP</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= HOME ================= -->
+      <section id="screen-home" class="screen active">
+        <div class="hero">
+          <h1><span class="grad-text">JAVA QUEST</span></h1>
+          <p>A futuristic offline learning adventure that takes 15 Java beginners from zero to exam-ready through storytelling, quizzes, puzzles, coding challenges and boss battles. Three game modes, seven world regions, full Java syllabus — all stored on your device.</p>
+          <div class="badges-row">
+            <span class="chip">⚡ 7 Missions</span>
+            <span class="chip purple">🎯 3 Game Modes</span>
+            <span class="chip gold">🏆 XP · Levels · Badges</span>
+            <span class="chip">📦 100% Offline</span>
+            <span class="chip purple">🌐 GitHub Pages Ready</span>
+          </div>
+          <div class="flex gap-12" style="justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-lg" data-nav="missions">🚀 Start Your Quest</button>
+            <button class="btn btn-ghost btn-lg" data-nav="solo">🎮 Solo Mode</button>
+          </div>
+        </div>
+
+        <div class="mode-grid">
+          <div class="mode-card" data-nav="solo">
+            <div class="icon">🧑‍🚀</div>
+            <h3>Solo Mode</h3>
+            <p>Play individually. Choose your avatar, pick a mission, answer questions, earn XP and review your mistakes. Get a full final report with weak topics.</p>
+            <div class="go">ENTER →</div>
+          </div>
+          <div class="mode-card" data-nav="team">
+            <div class="icon">👥</div>
+            <h3>Team Mode</h3>
+            <p>Local pass-and-play on one device. Create teams, assign members, choose question count and scoring system. Four team formats supported.</p>
+            <div class="go">ENTER →</div>
+          </div>
+          <div class="mode-card" data-nav="host">
+            <div class="icon">🎙️</div>
+            <h3>Host Mode</h3>
+            <p>Live presentation & screen-sharing mode. One question at a time, reveal answers and explanations, pick students, award points, fullscreen podium.</p>
+            <div class="go">ENTER →</div>
+          </div>
+        </div>
+
+        <div class="glass pad mt-24">
+          <h3 style="margin-bottom:10px;">🌍 The World of <span class="grad-text">JAVA CORE</span></h3>
+          <p class="text-dim" style="margin-bottom:14px;">Seven futuristic regions cover the full Java syllabus. Each region has story, lessons, code examples, interactive exercises, a quiz, a debugging challenge and a boss battle.</p>
+          <div class="city-grid" id="homeRegionGrid"></div>
+        </div>
+
+        <div class="glass pad mt-24">
+          <h3 style="margin-bottom:10px;">📊 Your Progress</h3>
+          <div id="homeStats" class="report-grid"></div>
+          <div class="flex gap-12 mt-16" style="flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" id="exportBtn">⬇️ Export Results (JSON)</button>
+            <button class="btn btn-ghost btn-sm" id="importBtn">⬆️ Import Results (JSON)</button>
+            <button class="btn btn-danger btn-sm" id="resetBtn">🗑️ Reset Progress</button>
+          </div>
+          <p class="text-dim mt-16" style="font-size:.82rem;">⚠️ All scores and progress are stored only in your browser's LocalStorage on this device. They are NOT automatically shared across devices. Use Export/Import to move results manually.</p>
+        </div>
+      </section>
+
+      <!-- ================= MISSIONS / MAP ================= -->
+      <section id="screen-missions" class="screen">
+        <div class="map-header">
+          <h2><span class="grad-text">MISSION MAP</span></h2>
+          <p>Unlock each region by completing the previous one. Locked regions show 🔒.</p>
+        </div>
+        <div class="mission-path" id="missionPath"></div>
+      </section>
+
+      <!-- ================= SOLO MODE ================= -->
+      <section id="screen-solo" class="screen">
+        <!-- setup -->
+        <div id="soloSetup" class="glass pad">
+          <h2 style="margin-bottom:18px;">🧑‍🚀 Solo Setup</h2>
+          <div class="field">
+            <label>Player Name</label>
+            <input type="text" id="soloName" placeholder="Enter your name..." maxlength="24" />
+          </div>
+          <div class="field">
+            <label>Choose Avatar</label>
+            <div class="avatar-grid" id="avatarGrid"></div>
+          </div>
+          <div class="field">
+            <label>Select Mission</label>
+            <select id="soloMission"></select>
+          </div>
+          <div class="field">
+            <label>Difficulty</label>
+            <div class="diff-row" id="soloDiff">
+              <div class="diff-pill" data-diff="easy"><div>Easy</div><div class="stars">★☆☆</div><small>10 Q · No timer</small></div>
+              <div class="diff-pill selected" data-diff="medium"><div>Medium</div><div class="stars">★★☆</div><small>15 Q · 45s/Q</small></div>
+              <div class="diff-pill" data-diff="hard"><div>Hard</div><div class="stars">★★★</div><small>20 Q · 30s/Q</small></div>
+            </div>
+          </div>
+          <div class="flex gap-12 mt-16">
+            <button class="btn btn-primary btn-lg" id="soloStart">▶️ Start Quest</button>
+            <button class="btn btn-ghost" id="soloReviewMistakes">📖 Review My Mistakes</button>
+            <button class="btn btn-ghost" id="soloBookmarks">🔖 Bookmarks</button>
+          </div>
+        </div>
+
+        <!-- gameplay -->
+        <div id="soloPlay" class="hidden">
+          <div class="hud" id="soloHud"></div>
+          <div class="glass q-card" id="soloQCard"></div>
+          <div class="flex gap-12 mt-16" style="flex-wrap:wrap;" id="soloActions">
+            <button class="btn btn-primary" id="soloNext">Next →</button>
+            <button class="btn btn-ghost" id="soloSkip">Skip</button>
+            <button class="btn btn-ghost" id="soloBookmark">🔖 Bookmark</button>
+            <button class="btn btn-danger btn-sm" id="soloQuit">Quit</button>
+          </div>
+        </div>
+
+        <!-- results -->
+        <div id="soloResults" class="hidden"></div>
+
+        <!-- mistakes review -->
+        <div id="soloMistakesView" class="hidden"></div>
+
+        <!-- bookmarks -->
+        <div id="soloBookmarksView" class="hidden"></div>
+      </section>
+
+      <!-- ================= TEAM MODE ================= -->
+      <section id="screen-team" class="screen">
+        <div id="teamSetup" class="glass pad">
+          <h2 style="margin-bottom:8px;">👥 Team Mode — Local Pass &amp; Play</h2>
+          <p class="text-dim mb-16">Create teams on this one device. All gameplay stays local — pass the device between players.</p>
+
+          <div class="field">
+            <label>Team Format</label>
+            <select id="teamFormat">
+              <option value="rep">1. One representative answers for the team</option>
+              <option value="turns">2. Players take turns answering</option>
+              <option value="fixed">3. Each member answers a fixed number of questions</option>
+              <option value="together">4. Teams solve the same questions together</option>
+            </select>
+          </div>
+
+          <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+            <div class="field" style="flex:1; min-width:140px;">
+              <label>Number of questions</label>
+              <input type="number" id="teamQCount" value="10" min="3" max="50" />
+            </div>
+            <div class="field" style="flex:1; min-width:160px;">
+              <label>Question category</label>
+              <select id="teamCategory"></select>
+            </div>
+            <div class="field" style="flex:1; min-width:160px;">
+              <label>Scoring system</label>
+              <select id="teamScoring">
+                <option value="standard">Standard (10 correct, 0 wrong)</option>
+                <option value="streak">Streak bonus (+5 per consecutive)</option>
+                <option value="speed">Speed bonus (+1..5 by time)</option>
+                <option value="double">Double or nothing (+10 / -5)</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1; min-width:140px;">
+              <label>Difficulty filter</label>
+              <select id="teamDifficulty">
+                <option value="any">Any</option>
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          </div>
+
+          <h3 style="margin-bottom:10px;">Teams</h3>
+          <div class="team-list" id="teamList"></div>
+          <button class="btn btn-ghost mt-16" id="addTeam">➕ Add Team</button>
+
+          <div class="flex gap-12 mt-24" style="flex-wrap:wrap;">
+            <button class="btn btn-primary btn-lg" id="teamStart">▶️ Start Team Game</button>
+            <button class="btn btn-ghost" id="teamLoadExample">Load Example Roster</button>
+          </div>
+        </div>
+
+        <div id="teamPlay" class="hidden">
+          <div class="turn-indicator" id="teamTurn"></div>
+          <div class="hud" id="teamHud"></div>
+          <div class="glass q-card" id="teamQCard"></div>
+          <div class="flex gap-12 mt-16" style="flex-wrap:wrap;" id="teamActions">
+            <button class="btn btn-primary" id="teamNext">Next Player →</button>
+            <button class="btn btn-ghost" id="teamSkip">Skip Question</button>
+            <button class="btn btn-danger btn-sm" id="teamQuit">End Game</button>
+          </div>
+        </div>
+
+        <div id="teamResults" class="hidden"></div>
+      </section>
+
+      <!-- ================= HOST MODE ================= -->
+      <section id="screen-host" class="screen">
+        <div id="hostSetup" class="glass pad">
+          <h2 style="margin-bottom:8px;">🎙️ Host Mode — Presentation &amp; Screen Sharing</h2>
+          <p class="text-dim mb-16">Share your screen. Ask students verbally. Reveal answers, award points, run a live leaderboard.</p>
+
+          <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+            <div class="field" style="flex:1; min-width:160px;">
+              <label>Question category</label>
+              <select id="hostCategory"></select>
+            </div>
+            <div class="field" style="flex:1; min-width:140px;">
+              <label>Difficulty</label>
+              <select id="hostDifficulty">
+                <option value="any">Any</option>
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1; min-width:140px;">
+              <label>Order</label>
+              <select id="hostOrder">
+                <option value="seq" selected>Sequential</option>
+                <option value="rand">Shuffled</option>
+              </select>
+            </div>
+          </div>
+
+          <h3 style="margin:14px 0 8px;">Students / Teams roster (optional)</h3>
+          <p class="text-dim mb-8" style="font-size:.85rem;">Add names you might pick from during the session. Leave empty to type names manually.</p>
+          <div class="flex gap-12" style="flex-wrap:wrap; align-items:flex-end;">
+            <div class="field" style="flex:1; min-width:180px;">
+              <label>Add student or team</label>
+              <input type="text" id="hostAddName" placeholder="e.g. Ahmed or Team Alpha" />
+            </div>
+            <button class="btn btn-ghost" id="hostAddBtn">➕ Add</button>
+            <button class="btn btn-ghost btn-sm" id="hostClearRoster">Clear</button>
+          </div>
+          <div class="student-grid mt-16" id="hostRoster"></div>
+
+          <div class="flex gap-12 mt-24" style="flex-wrap:wrap;">
+            <button class="btn btn-primary btn-lg" id="hostStart">▶️ Start Presentation</button>
+            <button class="btn btn-ghost" id="hostFullscreen">⛶ Fullscreen</button>
+          </div>
+        </div>
+
+        <div id="hostPlay" class="hidden host-stage">
+          <div class="hud" id="hostHud"></div>
+          <div class="glass q-card host-stage" id="hostQCard" style="padding:30px;"></div>
+
+          <div class="glass pad mt-16">
+            <h4 style="margin-bottom:10px;">🎯 Pick a student / team</h4>
+            <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" id="hostPickRandom">🎲 Random Pick</button>
+              <button class="btn btn-ghost btn-sm" id="hostClearPick">Clear Pick</button>
+              <span id="hostPickedName" class="chip gold" style="font-size:1rem;"></span>
+            </div>
+            <div class="student-grid" id="hostRosterLive"></div>
+          </div>
+
+          <div class="glass pad mt-16">
+            <h4 style="margin-bottom:10px;">🏆 Live Leaderboard</h4>
+            <div class="leaderboard" id="hostLeaderboard"></div>
+            <div class="flex gap-12 mt-16" style="flex-wrap:wrap; align-items:center;">
+              <span class="text-dim" style="font-size:.85rem;">Award points to <b id="hostAwardFor">—</b>:</span>
+              <button class="btn btn-ghost btn-sm" data-award="1">+1</button>
+              <button class="btn btn-ghost btn-sm" data-award="2">+2</button>
+              <button class="btn btn-ghost btn-sm" data-award="3">+3</button>
+              <button class="btn btn-ghost btn-sm" data-award="5">+5</button>
+              <button class="btn btn-ghost btn-sm" data-award="10">+10</button>
+              <button class="btn btn-danger btn-sm" data-award="-2">−2</button>
+              <button class="btn btn-ghost btn-sm" data-award="-5">−5</button>
+            </div>
+          </div>
+
+          <div class="host-controls mt-24">
+            <button class="btn btn-ghost" id="hostPrev">◀ Previous</button>
+            <button class="btn btn-ghost" id="hostRandom">🎲 Random Question</button>
+            <button class="btn btn-primary" id="hostReveal">👁️ Reveal Answer</button>
+            <button class="btn btn-purple" id="hostExplain">📖 Reveal Explanation</button>
+            <button class="btn btn-primary" id="hostNext">Next ▶</button>
+            <button class="btn btn-ghost" id="hostExitFullscreen">⛶ Toggle Fullscreen</button>
+            <button class="btn btn-danger btn-sm" id="hostEnd">End Session</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= QUESTION BANK ================= -->
+      <section id="screen-bank" class="screen">
+        <div class="glass pad">
+          <h2 style="margin-bottom:14px;">📚 Question Bank</h2>
+          <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+            <div class="field" style="flex:1; min-width:180px;">
+              <label>Source</label>
+              <select id="bankSource"><option value="any">All sources</option></select>
+            </div>
+            <div class="field" style="flex:1; min-width:160px;">
+              <label>Category</label>
+              <select id="bankCategory"><option value="any">All categories</option></select>
+            </div>
+            <div class="field" style="flex:1; min-width:140px;">
+              <label>Type</label>
+              <select id="bankType"><option value="any">All types</option></select>
+            </div>
+            <div class="field" style="flex:1; min-width:120px;">
+              <label>Difficulty</label>
+              <select id="bankDiff"><option value="any">Any</option></select>
+            </div>
+            <div class="field" style="flex:1; min-width:160px;">
+              <label>Search</label>
+              <input type="text" id="bankSearch" placeholder="keyword..." />
+            </div>
+          </div>
+          <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+            <span class="chip" id="bankCount">0 questions</span>
+            <button class="btn btn-ghost btn-sm" id="bankOrigOnly">⭐ Original exam only</button>
+            <button class="btn btn-ghost btn-sm" id="bankClearFilters">Clear filters</button>
+          </div>
+          <div id="bankList" class="leaderboard"></div>
+        </div>
+      </section>
+
+      <!-- ================= PROFILE ================= -->
+      <section id="screen-profile" class="screen">
+        <div class="glass pad">
+          <h2 style="margin-bottom:14px;">🏆 Player Profile</h2>
+          <div id="profileHeader" class="flex gap-16" style="flex-wrap:wrap; align-items:center;"></div>
+          <div class="badges-grid mt-24" id="profileBadges"></div>
+          <h3 class="mt-24 mb-16">📜 Mission History</h3>
+          <div id="profileHistory" class="leaderboard"></div>
+          <h3 class="mt-24 mb-16">🔖 Bookmarks</h3>
+          <div id="profileBookmarks" class="leaderboard"></div>
+        </div>
+      </section>
+
+      <!-- ================= MISSION DETAIL (LESSON VIEW) ================= -->
+      <section id="screen-missionDetail" class="screen">
+        <div id="missionDetailBody"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- toast + modal containers -->
+  <div class="toast-stack" id="toastStack"></div>
+  <div class="modal-bg" id="modalBg">
+    <div class="glass modal" id="modalBody" style="position:relative;"></div>
+  </div>
+
+  <!-- hidden file input for import -->
+  <input type="file" id="importFile" accept="application/json" style="display:none;" />
+
+  <!-- ===== Scripts (order matters) ===== -->
+  <script src="data/questions.js"></script>
+  <script src="data/missions.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/solo.js"></script>
+  <script src="js/team.js"></script>
+  <script src="js/host.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
